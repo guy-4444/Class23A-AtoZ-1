@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "537386225206",
+    "project_id": "simon-says-fcb12",
+    "storage_bucket": "simon-says-fcb12.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537386225206:android:65feacd4a945af191f1297",
+        "android_client_info": {
+          "package_name": "com.avi.simonsaysgame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537386225206-ovm16dsrko90ht5dtmomrhohv52p5il8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaabmkbTYwRPKj9XJjxMLSWUx7OI5EowI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537386225206-ovm16dsrko90ht5dtmomrhohv52p5il8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
