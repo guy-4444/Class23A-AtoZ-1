@@ -1,19 +1,27 @@
 package com.avi.simonsaysgame;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -52,8 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        showBanner();
+        loadVideoAd();
     }
+
 
     private void showBanner() {
         String UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
@@ -87,25 +96,55 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void actionA() {
-        //Bundle bundle = new Bundle();
-        //bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "Action");
-        //bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "A");
-        //bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Clicked");
-        //mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "game_level");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Level 1");
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Selected");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        showBanner();
     }
 
     private void actionB() {
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "game_level");
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Level 2");
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Selected");
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        showVideoAd();
+    }
+
+
+
+
+
+    ///////////////////////////////////////////////
+    private RewardedAd mRewardedAd;
+
+
+    private void loadVideoAd() {
+        action_b.setEnabled(false);
+        String UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
+        if (BuildConfig.DEBUG) {
+            UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
+        }
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        RewardedAd.load(this, UNIT_ID,
+                adRequest, new RewardedAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error.
+                        Log.d("pttt", loadAdError.toString());
+                        mRewardedAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                        mRewardedAd = rewardedAd;
+                        action_b.setEnabled(true);
+                        Log.d("pttt", "Ad was loaded.");
+                    }
+                });
+    }
+
+    private void showVideoAd() {
+        mRewardedAd.show(this, new OnUserEarnedRewardListener() {
+            @Override
+            public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                Toast.makeText(MainActivity.this, "Congr... +1 Live", Toast.LENGTH_SHORT).show();
+                loadVideoAd();
+            }
+        });
     }
 
 }
