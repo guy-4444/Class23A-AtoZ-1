@@ -11,16 +11,45 @@ android {
         applicationId "com.avi.simonsaysgame"
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.00.01"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        def addConstantTo = {target, constantName, constantValue ->
+            target.manifestPlaceholders += [ (constantName):constantValue]
+            target.buildConfigField "String", "${constantName}", "\"${constantValue}\""
+        }
+
+        debug {
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                changeApkName(variant, defaultConfig)
+            }
+
+            buildConfigField('String', 'BaseUrl', '"https://api..."')
+            addConstantTo(owner,"ADMOB_APP_ID", "ca-app-pub-3940256099942544~3347511713")
+            addConstantTo(owner,"ADMOB_BANNER_AD_ID", "ca-app-pub-3940256099942544/6300978111")
+            addConstantTo(owner,"ADMOB_VIDEO_AD_ID", "ca-app-pub-3940256099942544/5224354917")
+        }
+
         release {
             minifyEnabled false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                changeApkName(variant, defaultConfig)
+            }
+
+            buildConfigField('String', 'BaseUrl', '"https://api..."')
+            addConstantTo(owner,"ADMOB_APP_ID", "ca-app-pub-3940256099942544~3347511713")
+            addConstantTo(owner,"ADMOB_BANNER_AD_ID", "ca-app-pub-3940256099942544/6300978111")
+            addConstantTo(owner,"ADMOB_VIDEO_AD_ID", "ca-app-pub-3940256099942544/5224354917")
         }
     }
     compileOptions {
@@ -40,7 +69,18 @@ dependencies {
 
 
     implementation platform('com.google.firebase:firebase-bom:31.1.0')
-    implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.android.gms:play-services-ads:21.3.0'
+    implementation 'com.google.firebase:firebase-analytics'
 
+}
+
+
+def changeApkName(variant, defaultConfig) {
+    variant.outputs.each { output ->
+        def buildType = variant.getBuildType().getName()
+        //def productFlavor = variant.productFlavors[0].name
+        variant.outputs.all {
+            outputFileName = "SymonSays_${defaultConfig.versionName}_" + buildType + ".apk"
+        }
+    }
 }

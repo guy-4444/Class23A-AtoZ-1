@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
-import com.pictrivia.common.CommonConstants;
-import com.pictrivia.common.activities.Activity_Base;
 
 public class Activity_VideoNew extends AppCompatActivity {
 
@@ -28,13 +26,19 @@ public class Activity_VideoNew extends AppCompatActivity {
     }
 
     private void start() {
-        coinVideo.show();
+        if (coinVideo.isLoaded()) {
+            action_a.setEnabled(false);
+            coinVideo.show();
+        } else {
+            initAds();
+            // move to next level
+        }
     }
 
     VideoAd.CallBack callBack = new VideoAd.CallBack() {
         @Override
         public void unitLoaded() {
-
+            action_a.setEnabled(true);
         }
 
         @Override
@@ -54,7 +58,9 @@ public class Activity_VideoNew extends AppCompatActivity {
     };
 
     private void initAds() {
-        coinVideo = new VideoAd(this, YOUR_ID, callBack);
+        action_a.setEnabled(false);
+        String UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
+        coinVideo = new VideoAd(this, UNIT_ID, callBack);
     }
 
 

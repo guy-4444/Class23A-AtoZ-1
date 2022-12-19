@@ -61,14 +61,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         loadVideoAd();
+
+
+        String url = BuildConfig.BaseUrl;
     }
 
 
     private void showBanner() {
-        String UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
-        if (BuildConfig.DEBUG) {
-            UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
-        }
+        String UNIT_ID = BuildConfig.ADMOB_BANNER_AD_ID;
 
         AdView adView = new AdView(this);
         adView.setAdUnitId(UNIT_ID);
@@ -113,10 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadVideoAd() {
         action_b.setEnabled(false);
-        String UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
-        if (BuildConfig.DEBUG) {
-            UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
-        }
+        String UNIT_ID = BuildConfig.ADMOB_VIDEO_AD_ID;
 
         AdRequest adRequest = new AdRequest.Builder().build();
         RewardedAd.load(this, UNIT_ID,
